@@ -1,0 +1,282 @@
+Program.Sub.ScreenSU.Start
+gui.SS_Form1..create
+gui.SS_Form1..caption("Holiday STAT Pay")
+gui.SS_Form1..size(6905,7515)
+gui.SS_Form1..position(0,0)
+gui.SS_Form1..event(unload,ss_form1_unload)
+gui.SS_Form1..alwaysontop(False)
+gui.SS_Form1..fontname("Arial")
+gui.SS_Form1..fontsize(8)
+gui.SS_Form1..forecolor(0)
+gui.SS_Form1..fontstyle(,,,,)
+gui.SS_Form1..BackColor(-2147483633)
+gui.SS_Form1..controlbox(True)
+gui.SS_Form1..maxbutton(False)
+gui.SS_Form1..minbutton(False)
+gui.SS_Form1..mousepointer(0)
+gui.SS_Form1..moveable(True)
+gui.SS_Form1..sizeable(False)
+gui.SS_Form1..ShowInTaskBar(True)
+gui.SS_Form1..titlebar(True)
+gui.SS_Form1.lbl_txtJob.create(label,"Job",True,1800,200,1,100,135,True,0,Arial,8,-2147483633,0)
+gui.SS_Form1.txtJob.create(textbox,"",True,1800,330,0,100,335,True,0,Arial,8,16777215,1)
+gui.SS_Form1.txtJob.maxLength(6)
+gui.SS_Form1.lbl_txtSuffix.create(label,"Suffix",True,1800,200,1,1985,135,True,0,Arial,8,-2147483633,0)
+gui.SS_Form1.txtSuffix.create(textbox,"",True,690,330,0,1985,335,True,0,Arial,8,16777215,1)
+gui.SS_Form1.txtSuffix.maxLength(3)
+gui.SS_Form1.cmd_txtSuffix.create(button)
+gui.SS_Form1.cmd_txtSuffix.caption("^")
+gui.SS_Form1.cmd_txtSuffix.visible(True)
+gui.SS_Form1.cmd_txtSuffix.size(330,330)
+gui.SS_Form1.cmd_txtSuffix.zorder(0)
+gui.SS_Form1.cmd_txtSuffix.position(2760,335)
+gui.SS_Form1.cmd_txtSuffix.enabled(True)
+gui.SS_Form1.cmd_txtSuffix.fontname("Arial")
+gui.SS_Form1.cmd_txtSuffix.fontsize(8)
+gui.SS_Form1.cmd_txtSuffix.event(click,cmd_txtsuffix_click)
+gui.SS_Form1.lbl_txtSeq.create(label,"Sequence",True,1800,200,1,3215,135,True,0,Arial,8,-2147483633,0)
+gui.SS_Form1.txtSeq.create(textbox,"",True,1800,330,0,3200,335,True,0,Arial,8,16777215,1)
+gui.SS_Form1.txtSeq.maxLength(6)
+gui.SS_Form1.cmd_txtSeq.create(button)
+gui.SS_Form1.cmd_txtSeq.caption("^")
+gui.SS_Form1.cmd_txtSeq.visible(True)
+gui.SS_Form1.cmd_txtSeq.size(330,330)
+gui.SS_Form1.cmd_txtSeq.zorder(0)
+gui.SS_Form1.cmd_txtSeq.position(5085,335)
+gui.SS_Form1.cmd_txtSeq.enabled(True)
+gui.SS_Form1.cmd_txtSeq.fontname("Arial")
+gui.SS_Form1.cmd_txtSeq.fontsize(8)
+gui.SS_Form1.cmd_txtSeq.event(click,cmd_txtseq_click)
+gui.SS_Form1.lbl_dtpDate.create(label,"Charge Date",True,1800,200,1,100,835,True,0,Arial,8,-2147483633,0)
+gui.SS_Form1.dtpDate.create(datepicker)
+gui.SS_Form1.dtpDate.visible(True)
+gui.SS_Form1.dtpDate.size(1800,345)
+gui.SS_Form1.dtpDate.zorder(0)
+gui.SS_Form1.dtpDate.position(100,1035)
+gui.SS_Form1.dtpDate.enabled(True)
+gui.SS_Form1.dtpDate.checkbox(False)
+gui.SS_Form1.lbl_txtHours.create(label,"Hours",True,1800,200,1,100,1465,True,0,Arial,8,-2147483633,0)
+gui.SS_Form1.txtHours.create(textbox,"",True,1800,330,0,100,1665,True,0,Arial,8,16777215,1)
+gui.SS_Form1.txtHours.numericonly(1)
+gui.SS_Form1.lvwEmp.create(listview)
+gui.SS_Form1.lvwEmp.view(3)
+gui.SS_Form1.lvwEmp.addlistviewcolumn("Apply",750,0)
+gui.SS_Form1.lvwEmp.addlistviewcolumn("ID",1000,0)
+gui.SS_Form1.lvwEmp.addlistviewcolumn("Employee Name",4500,0)
+gui.SS_Form1.lvwEmp.visible(True)
+gui.SS_Form1.lvwEmp.size(6555,4385)
+gui.SS_Form1.lvwEmp.zorder(0)
+gui.SS_Form1.lvwEmp.position(100,2080)
+gui.SS_Form1.lvwEmp.enabled(True)
+gui.SS_Form1.lvwEmp.fontname("Arial")
+gui.SS_Form1.lvwEmp.fontsize(8)
+gui.SS_Form1.cmdSave.create(button)
+gui.SS_Form1.cmdSave.caption("Save")
+gui.SS_Form1.cmdSave.visible(True)
+gui.SS_Form1.cmdSave.size(1000,360)
+gui.SS_Form1.cmdSave.zorder(0)
+gui.SS_Form1.cmdSave.position(160,6540)
+gui.SS_Form1.cmdSave.enabled(True)
+gui.SS_Form1.cmdSave.fontname("Arial")
+gui.SS_Form1.cmdSave.fontsize(8)
+gui.SS_Form1.cmdSave.event(click,cmdsave_click)
+
+
+Program.Sub.ScreenSU.End
+
+Program.Sub.Preflight.Start
+
+Variable.Global.sWC.Declare(String)
+Program.Sub.Preflight.End
+
+Program.Sub.Main.Start
+F.ODBC.Connection!con.OpenConnection(V.Ambient.PDSN,V.Ambient.PUser,V.Ambient.PPass)
+Gui.SS_Form1.lvwEmp.Checkboxes("True")
+F.Intrinsic.Control.CallSub(Empload)
+Gui.SS_Form1..Show
+
+Program.Sub.Main.End
+
+program.sub.ss_form1_unload.start
+F.ODBC.Connection!con.Close
+F.Intrinsic.Control.End
+
+program.sub.ss_form1_unload.end
+
+program.sub.cmd_txtsuffix_click.start
+F.Intrinsic.Control.SetErrorHandler("cmd_txtsuffix_click_Err")
+F.Intrinsic.Control.ClearErrors
+
+V.Local.sError.Declare(String)
+V.Local.sRet.Declare(String)
+
+Function.Intrinsic.UI.Browser(1000,"",Variable.Local.sRet)
+Function.Intrinsic.Control.If(Variable.Local.sRet,<>,"***CANCEL***")
+	F.Intrinsic.String.Split(V.Local.sRet,"*!*",V.Local.sRet)
+	Gui.SS_Form1.txtJob.Text(V.Local.sRet(0).Trim)
+	Gui.SS_Form1.txtSuffix.Text(V.Local.sRet(1).Trim)
+F.Intrinsic.Control.EndIf
+
+F.Intrinsic.Control.ExitSub
+
+F.Intrinsic.Control.Label("cmd_txtsuffix_click_Err")
+F.Intrinsic.Control.If(V.Ambient.ErrorNumber,<>,0)
+	Function.Intrinsic.String.Concat("Project: GCG_Holiday_STAT_Pay.gas",V.Ambient.Newline,V.Ambient.Newline,"Subroutine: ",V.Ambient.CurrentSubroutine,V.Ambient.NewLine,"Error Occurred ",V.Ambient.ErrorNumber," with description ",V.Ambient.ErrorDescription,V.Local.sError)
+	F.Intrinsic.UI.Msgbox(V.Local.sError)
+	F.Intrinsic.Control.CallSub(Ss_form1_unload)
+Function.Intrinsic.Control.EndIf
+
+program.sub.cmd_txtsuffix_click.end
+
+program.sub.cmd_txtseq_click.start
+F.Intrinsic.Control.SetErrorHandler("cmd_txtseq_click_Err")
+F.Intrinsic.Control.ClearErrors
+
+V.Local.sError.Declare(String)
+V.Local.sSql.Declare(String)
+V.Local.sJob.Declare(String)
+V.Local.sSuffix.Declare(String)
+V.Local.sTitles.Declare(String)
+V.Local.sWidths.Declare(String)
+V.Local.sRet.Declare(String)
+V.Local.sWC.Declare(String)
+
+V.Local.sJob.Set(V.Screen.SS_Form1!txtJob.Text)
+V.Local.sSuffix.Set(V.Screen.SS_Form1!txtSuffix.Text)
+F.Intrinsic.String.Concat("Select SEQ, LMO, WORKCENTER, DESCRIPTION from V_JOB_OPERATIONS_WC where LMO = 'L' and JOB = '",V.Local.sJob.Trim,"' and SUFFIX = '",V.Local.sSuffix.Trim,"' ORDER BY SEQ",V.Local.sSql)
+V.Local.sTitles.Set("Sequence*!*LMO*!*Workcenter*!*Description")
+V.Local.sWidths.Set("1000*!*500*!*1000*!*4200")
+F.Intrinsic.String.Split(V.Local.sTitles,"*!*",V.Local.sTitles)
+F.Intrinsic.String.Split(V.Local.sWidths,"*!*",V.Local.sWidths)
+F.Intrinsic.UI.SetBrowserHotTypeAhead(True)
+F.Intrinsic.UI.Browser("Select Work Order Sequence","con",V.Local.sSql,V.Local.sTitles,V.Local.sWidths,5000,8000,V.Local.sRet)
+F.Intrinsic.Control.If(V.Local.sRet,<>,"***CANCEL***")
+	F.Intrinsic.String.Split(V.Local.sRet,"*!*",V.Local.sRet)
+	Gui.SS_Form1.txtSeq.Text(V.Local.sRet(0).Trim)
+	V.Global.sWC.Set(V.Local.sRet(2).Trim)
+F.Intrinsic.Control.EndIf
+
+F.Intrinsic.Control.ExitSub
+
+F.Intrinsic.Control.Label("cmd_txtseq_click_Err")
+F.Intrinsic.Control.If(V.Ambient.ErrorNumber,<>,0)
+	Function.Intrinsic.String.Concat("Project: GCG_Holiday_STAT_Pay.gas",V.Ambient.Newline,V.Ambient.Newline,"Subroutine: ",V.Ambient.CurrentSubroutine,V.Ambient.NewLine,"Error Occurred ",V.Ambient.ErrorNumber," with description ",V.Ambient.ErrorDescription,V.Local.sError)
+	F.Intrinsic.UI.Msgbox(V.Local.sError)
+	F.Intrinsic.Control.CallSub(Ss_form1_unload)
+Function.Intrinsic.Control.EndIf
+
+program.sub.cmd_txtseq_click.end
+
+program.sub.cmdsave_click.start
+F.Intrinsic.Control.SetErrorHandler("cmdsave_click_Err")
+F.Intrinsic.Control.ClearErrors
+
+V.Local.sError.Declare(String)
+V.Local.sChkList.Declare(String)
+V.Local.iRet.Declare(Long)
+V.Local.dDate.Declare(Date)
+V.Local.sDate.Declare(String)
+V.Local.i.Declare(Long)
+V.Local.sHours.Declare(String)
+V.Local.sWrite.Declare(String)
+V.Local.sListLine.Declare(String)
+V.Local.sFile.Declare(String)
+V.Local.sExecute.Declare(String)
+
+F.Intrinsic.Control.If(V.Screen.SS_Form1!txtJob.Text,=,"")
+	F.Intrinsic.UI.Msgbox("No work order selected!")
+	F.Intrinsic.Control.ExitSub
+F.Intrinsic.Control.EndIf
+F.Intrinsic.Control.If(V.Screen.SS_Form1!txtSeq.Text,=,"")
+	F.Intrinsic.UI.Msgbox("No work order sequence selected!")
+	F.Intrinsic.Control.ExitSub
+F.Intrinsic.Control.EndIf
+F.Intrinsic.Control.If(V.Screen.SS_Form1!txtHours.Text,=,"")
+	F.Intrinsic.UI.Msgbox("No hours entered!")
+	F.Intrinsic.Control.ExitSub
+F.Intrinsic.Control.EndIf
+Gui.SS_Form1.lvwEmp.RetrieveCheckedListItems(V.Local.sChkList)
+F.Intrinsic.Control.If(V.Local.sChkList,=,"***NORETURN***")
+	F.Intrinsic.UI.Msgbox("No employees selected!")
+	F.Intrinsic.Control.ExitSub
+F.Intrinsic.Control.EndIf
+F.Intrinsic.UI.Msgbox("Are you sure you want to update?","",4,V.Local.iRet)
+F.Intrinsic.Control.If(V.Local.iRet,=,6)
+	'Formatting fields for file
+	V.Local.dDate.Set(V.Screen.SS_Form1!dtpDate.Value)
+	F.Intrinsic.String.Format(V.Local.dDate,"MMDDYY",V.Local.sDate)
+	V.Local.sHours.Set(V.Screen.SS_Form1!txtHours.Text)
+	F.Intrinsic.String.Format(V.Local.sHours,"#.00",V.Local.sHours)
+
+	'Splitting out checked employees
+	F.Intrinsic.String.Split(V.Local.sChkList,"*!*",V.Local.sChkList)
+	F.Intrinsic.Control.For(V.Local.i,V.Local.sChkList.LBound,V.Local.sChkList.UBound,1)
+		V.Local.sListLine.Set(V.Screen.SS_Form1!lvwEmp.ListItemTextExtended(V.Local.sChkList(V.Local.i)))
+		F.Intrinsic.String.Split(V.Local.sListLine,"*!*",V.Local.sListLine)
+		F.Intrinsic.Control.If(V.Local.sWrite,=,"")
+			F.Intrinsic.String.Concat(V.Local.sDate,V.Ambient.Tab,V.Local.sListLine(1).Trim,V.Ambient.Tab,V.Screen.SS_Form1!txtJob.Text,V.Ambient.Tab,V.Screen.SS_Form1!txtSuffix.Text,V.Ambient.Tab,V.Screen.SS_Form1!txtSeq.Text,V.Ambient.Tab,V.Global.sWC,V.Ambient.Tab,V.Local.sHours,V.Ambient.Tab,"N",V.Ambient.Tab,"I",V.Ambient.Tab,"0001",V.Ambient.Tab,"0001",V.Ambient.Tab,"R",V.Ambient.Tab,"0.00",V.Ambient.Tab,"0.00",V.Ambient.Tab,V.Ambient.Tab,V.Ambient.Tab,V.Local.sWrite)
+		F.Intrinsic.Control.Else
+			F.Intrinsic.String.Concat(V.Local.sWrite,V.Ambient.NewLine,V.Local.sDate,V.Ambient.Tab,V.Local.sListLine(1).Trim,V.Ambient.Tab,V.Screen.SS_Form1!txtJob.Text,V.Ambient.Tab,V.Screen.SS_Form1!txtSuffix.Text,V.Ambient.Tab,V.Screen.SS_Form1!txtSeq.Text,V.Ambient.Tab,V.Global.sWC,V.Ambient.Tab,V.Local.sHours,V.Ambient.Tab,"N",V.Ambient.Tab,"I",V.Ambient.Tab,"0001",V.Ambient.Tab,"0001",V.Ambient.Tab,"R",V.Ambient.Tab,"0.00",V.Ambient.Tab,"0.00",V.Ambient.Tab,V.Ambient.Tab,V.Ambient.Tab,V.Local.sWrite)
+		F.Intrinsic.Control.EndIf
+	F.Intrinsic.Control.Next(V.Local.i)
+	'Writing Out File for JB0455
+	F.Intrinsic.Control.If(V.Local.sWrite,<>,"")
+		F.Intrinsic.String.Concat(V.Caller.FilesDir,"\",V.Caller.CompanyCode,V.Caller.Terminal,"MOPEN.txt",V.Local.sFile)
+		F.Intrinsic.File.String2File(V.Local.sFile,V.Local.sWrite)
+		F.Intrinsic.String.Concat(V.Ambient.DblQuote,V.Caller.CompanyCode,V.Caller.Terminal,"MOPEN.txt",V.Ambient.DblQuote,V.Local.sExecute)
+		F.Intrinsic.Task.LaunchGSSSync("JB0455","-c",V.Local.sExecute)
+	F.Intrinsic.Control.EndIf
+	F.Intrinsic.UI.Msgbox("All time has been uploaded, please ensure Online Update is running in order to finish processing the records into Global Shop.")
+F.Intrinsic.Control.Else
+	F.Intrinsic.Control.ExitSub
+F.Intrinsic.Control.EndIf
+
+
+F.Intrinsic.Control.ExitSub
+
+F.Intrinsic.Control.Label("cmdsave_click_Err")
+F.Intrinsic.Control.If(V.Ambient.ErrorNumber,<>,0)
+	Function.Intrinsic.String.Concat("Project: GCG_Holiday_STAT_Pay.gas",V.Ambient.Newline,V.Ambient.Newline,"Subroutine: ",V.Ambient.CurrentSubroutine,V.Ambient.NewLine,"Error Occurred ",V.Ambient.ErrorNumber," with description ",V.Ambient.ErrorDescription,V.Local.sError)
+	F.Intrinsic.UI.Msgbox(V.Local.sError)
+	F.Intrinsic.Control.CallSub(Ss_form1_unload)
+Function.Intrinsic.Control.EndIf
+
+program.sub.cmdsave_click.end
+
+Program.Sub.EmpLoad.Start
+F.Intrinsic.Control.SetErrorHandler("EmpLoad_Err")
+F.Intrinsic.Control.ClearErrors
+
+V.Local.sError.Declare(String)
+V.Local.sSql.Declare(String)
+V.Local.i.Declare(Long)
+
+V.Local.sSql.Set("select EMPLOYEE,NAME from V_EMPLOYEE_MSTR where DATE_TERMINATION = '1900-01-01'")
+F.ODBC.Connection!con.OpenLocalRecordsetRO("rst",V.Local.sSql)
+F.Intrinsic.Control.If(V.ODBC.con!rst.EOF,=,True)
+	F.Intrinsic.UI.Msgbox("No employees found!")
+	F.ODBC.con!rst.Close
+	F.Intrinsic.Control.CallSub(Ss_form1_unload)
+F.Intrinsic.Control.Else
+	F.Intrinsic.Control.DoUntil(V.ODBC.con!rst.EOF,=,True)
+		F.Intrinsic.Math.Add(V.Local.i,1,V.Local.i)
+		Gui.SS_Form1.lvwEmp.AddListItem(V.Local.i,"")
+		Gui.SS_Form1.lvwEmp.SetListItemSubItemText(V.Local.i,1,V.ODBC.con!rst.FieldValTrim!EMPLOYEE)
+		Gui.SS_Form1.lvwEmp.SetListItemSubItemText(V.Local.i,2,V.ODBC.con!rst.FieldValTrim!NAME)
+		F.ODBC.con!rst.MoveNext
+	F.Intrinsic.Control.Loop
+	F.ODBC.con!rst.Close
+F.Intrinsic.Control.EndIf
+
+F.Intrinsic.Control.ExitSub
+
+F.Intrinsic.Control.Label("EmpLoad_Err")
+F.Intrinsic.Control.If(V.Ambient.ErrorNumber,<>,0)
+	Function.Intrinsic.String.Concat("Project: GCG_Holiday_STAT_Pay.gas",V.Ambient.Newline,V.Ambient.Newline,"Subroutine: ",V.Ambient.CurrentSubroutine,V.Ambient.NewLine,"Error Occurred ",V.Ambient.ErrorNumber," with description ",V.Ambient.ErrorDescription,V.Local.sError)
+	F.Intrinsic.UI.Msgbox(V.Local.sError)
+	F.Intrinsic.Control.CallSub(Ss_form1_unload)
+Function.Intrinsic.Control.EndIf
+
+Program.Sub.EmpLoad.End
+
+
